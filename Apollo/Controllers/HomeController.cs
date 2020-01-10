@@ -15,7 +15,7 @@ namespace Apollo.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Testing Managing my code.";
 
             return View();
         }
