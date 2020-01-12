@@ -141,7 +141,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Core\Controllers\Corporation_CatalogController.cs" />
     <Compile Include="Areas\Core\CoreAreaRegistration.cs" />
+    <Compile Include="Areas\Core\Models\Database\Client_Catalog.cs">
+      <DependentUpon>edmCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Core\Models\Database\Corporation_Catalog.cs">
       <DependentUpon>edmCore.tt</DependentUpon>
     </Compile>
@@ -160,9 +164,18 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>edmCore.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Core\Models\Database\Enagement_Details.cs">
+      <DependentUpon>edmCore.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Areas\Core\Models\Database\Engagement_Catalog.cs">
+      <DependentUpon>edmCore.tt</DependentUpon>
+    </Compile>
     <Compile Include="Areas\Core\Models\Database\Facility_Catalog.cs">
       <DependentUpon>edmCore.tt</DependentUpon>
     </Compile>
+    <Compile Include="Areas\Core\Models\Interface\ICorporation.cs" />
+    <Compile Include="Areas\Core\Models\SelectList\CorporationSelectList.cs" />
+    <Compile Include="Areas\Core\Models\ViewModel\vmCreateCorporationCatalog.cs" />
     <Compile Include="Areas\Financial\FinancialAreaRegistration.cs" />
     <Compile Include="Areas\Government\GovernmentAreaRegistration.cs" />
     <Compile Include="Areas\Healthcare\HealthcareAreaRegistration.cs" />
@@ -205,6 +218,13 @@
     <Content Include="Areas\Core\Models\Database\edmCore.edmx.diagram">
       <DependentUpon>edmCore.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Core\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Core\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Core\Views\Corporation_Catalog\Create.cshtml" />
+    <Content Include="Areas\Core\Views\Corporation_Catalog\Delete.cshtml" />
+    <Content Include="Areas\Core\Views\Corporation_Catalog\Details.cshtml" />
+    <Content Include="Areas\Core\Views\Corporation_Catalog\Edit.cshtml" />
+    <Content Include="Areas\Core\Views\Corporation_Catalog\Index.cshtml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -233,19 +253,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\Core\Controllers\" />
-    <Folder Include="Areas\Core\Models\Interface\" />
-    <Folder Include="Areas\Core\Models\SelectList\" />
-    <Folder Include="Areas\Core\Models\ViewModel\" />
-    <Folder Include="Areas\Core\Views\Shared\" />
     <Folder Include="Areas\Financial\Controllers\" />
-    <Folder Include="Areas\Financial\Models\" />
+    <Folder Include="Areas\Financial\Models\Database\" />
+    <Folder Include="Areas\Financial\Models\Interface\" />
+    <Folder Include="Areas\Financial\Models\SelectList\" />
+    <Folder Include="Areas\Financial\Models\ViewModel\" />
     <Folder Include="Areas\Financial\Views\Shared\" />
     <Folder Include="Areas\Government\Controllers\" />
-    <Folder Include="Areas\Government\Models\" />
+    <Folder Include="Areas\Government\Models\Database\" />
+    <Folder Include="Areas\Government\Models\Interface\" />
+    <Folder Include="Areas\Government\Models\SelectList\" />
+    <Folder Include="Areas\Government\Models\ViewModel\" />
     <Folder Include="Areas\Government\Views\Shared\" />
     <Folder Include="Areas\Healthcare\Controllers\" />
-    <Folder Include="Areas\Healthcare\Models\" />
+    <Folder Include="Areas\Healthcare\Models\Database\" />
+    <Folder Include="Areas\Healthcare\Models\Interface\" />
+    <Folder Include="Areas\Healthcare\Models\SelectList\" />
+    <Folder Include="Areas\Healthcare\Models\ViewModel\" />
     <Folder Include="Areas\Healthcare\Views\Shared\" />
     <Folder Include="Models\" />
   </ItemGroup>

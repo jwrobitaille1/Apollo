@@ -13,10 +13,10 @@ namespace Apollo.Areas.Core.Models.Database
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class Core : DbContext
+    public partial class edmCore : DbContext
     {
-        public Core()
-            : base("name=Core")
+        public edmCore()
+            : base("name=edmCore")
         {
         }
     
@@ -27,5 +27,8 @@ namespace Apollo.Areas.Core.Models.Database
     
         public virtual DbSet<Corporation_Catalog> Corporation_Catalog { get; set; }
         public virtual DbSet<Facility_Catalog> Facility_Catalog { get; set; }
+        public virtual DbSet<Engagement_Catalog> Engagement_Catalog { get; set; }
+        public virtual DbSet<Enagement_Details> Enagement_Details { get; set; }
+        public virtual DbSet<Client_Catalog> Client_Catalog { get; set; }
     }
 }

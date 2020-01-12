@@ -4,10 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9e3c18df73404dd98250e8590797badb" Name="Diagram1">
+      <Diagram DiagramId="9e3c18df73404dd98250e8590797badb" Name="Diagram1" ZoomLevel="83">
         <EntityTypeShape EntityType="CoreModel.Corporation_Catalog" Width="2.375" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="CoreModel.Facility_Catalog" Width="5.5" PointX="4.5" PointY="1.25" />
         <AssociationConnector Association="CoreModel.Corporation_Catalog_FK" />
+        <EntityTypeShape EntityType="CoreModel.Engagement_Catalog" Width="3.5" PointX="8.375" PointY="4" />
+        <EntityTypeShape EntityType="CoreModel.Enagement_Details" Width="4" PointX="3.5" PointY="3.875" />
+        <EntityTypeShape EntityType="CoreModel.Client_Catalog" Width="2.75" PointX="7.875" PointY="7.125" />
+        <AssociationConnector Association="CoreModel.Enagement_DetailsClient_Catalog" />
+        <AssociationConnector Association="CoreModel.Engagement_Catalog_to_Enagement_Details" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
