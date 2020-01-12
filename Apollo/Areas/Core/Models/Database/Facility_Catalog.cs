@@ -18,6 +18,8 @@ namespace Apollo.Areas.Core.Models.Database
         public int Corporation_Catalog_ID { get; set; }
         public string Facility_Code { get; set; }
         public string Facility_Name { get; set; }
+        public string Facility_Description { get; set; }
+        public string Facility_Short_Code { get; set; }
     
         public virtual Corporation_Catalog Corporation_Catalog_FK { get; set; }
     }

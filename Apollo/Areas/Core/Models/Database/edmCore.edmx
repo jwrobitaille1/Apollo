@@ -8,9 +8,25 @@
   <EntityContainer Name="CoreModelStoreContainer">
     <EntitySet Name="Corporation_Catalog" EntityType="CoreModel.Store.Corporation_Catalog" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Facility_Catalog" EntityType="CoreModel.Store.Facility_Catalog" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Engagement_Catalog" EntityType="CoreModel.Store.Engagement_Catalog" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Enagement_Details" EntityType="CoreModel.Store.Enagement_Details" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Client_Catalog" EntityType="CoreModel.Store.Client_Catalog" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Enagement_DetailsClient_Catalog" EntityType="CoreModel.Store.Enagement_DetailsClient_Catalog" store:Type="Tables" Schema="dbo" />
     <AssociationSet Name="Corporation_Catalog_FK" Association="CoreModel.Store.Corporation_Catalog_FK">
       <End Role="Facility_Catalog" EntitySet="Facility_Catalog" />
       <End Role="Corporation_Catalog" EntitySet="Corporation_Catalog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enagement_DetailsClient_Catalog_Enagement_Details" Association="CoreModel.Store.FK_Enagement_DetailsClient_Catalog_Enagement_Details">
+      <End Role="Enagement_Details" EntitySet="Enagement_Details" />
+      <End Role="Enagement_DetailsClient_Catalog" EntitySet="Enagement_DetailsClient_Catalog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Enagement_DetailsClient_Catalog_Client_Catalog" Association="CoreModel.Store.FK_Enagement_DetailsClient_Catalog_Client_Catalog">
+      <End Role="Client_Catalog" EntitySet="Client_Catalog" />
+      <End Role="Enagement_DetailsClient_Catalog" EntitySet="Enagement_DetailsClient_Catalog" />
+    </AssociationSet>
+    <AssociationSet Name="Engagement_Catalog_to_Enagement_Details" Association="CoreModel.Store.Engagement_Catalog_to_Enagement_Details">
+      <End Role="Enagement_Details" EntitySet="Enagement_Details" />
+      <End Role="Engagement_Catalog" EntitySet="Engagement_Catalog" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Corporation_Catalog">
@@ -48,8 +64,55 @@
     </Key>
     <Property Name="Facility_Catalog_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Corporation_Catalog_ID" Type="int" Nullable="false" />
-    <Property Name="Facility_Code" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="Facility_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Facility_Code" Type="varchar" Nullable="false" MaxLength="50" />
+    <Property Name="Facility_Name" Type="varchar" Nullable="false" MaxLength="255" />
+    <Property Name="Facility_Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Facility_Short_Code" Type="nvarchar" Nullable="false" MaxLength="6" />
+  </EntityType>
+  <EntityType Name="Engagement_Catalog">
+    <Key>
+      <PropertyRef Name="Engagement_Catalog_ID" />
+    </Key>
+    <Property Name="Engagement_Catalog_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Engagement_Code" Type="nvarchar" Nullable="true" MaxLength="50" />
+    <Property Name="Engagement_Name" Type="nvarchar" Nullable="true" MaxLength="255" />
+    <Property Name="Engagement_Description" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Engagement" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Enagement_Details">
+    <Key>
+      <PropertyRef Name="Engagement_Details_ID" />
+    </Key>
+    <Property Name="Engagement_Details_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Engagement_Detail_Is_Active" Type="bit" Nullable="false" />
+    <Property Name="Engagement_Start_Date" Type="datetime" Nullable="false" />
+    <Property Name="Engagement_End_Date" Type="datetime" Nullable="false" />
+    <Property Name="Engagement_Baseline_Start_Date" Type="datetime" Nullable="false" />
+    <Property Name="Engagement_Baseline_End_Date" Type="datetime" Nullable="false" />
+    <Property Name="Engagement_Revenue" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Expense" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Profit" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Revenue_Budget" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Expense_Budget" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Profit_Budget" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Engagement_Catalog_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Client_Catalog">
+    <Key>
+      <PropertyRef Name="Client_Catalog_ID" />
+    </Key>
+    <Property Name="Client_Catalog_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Client_Code" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Client_Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Client_Description" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Enagement_DetailsClient_Catalog">
+    <Key>
+      <PropertyRef Name="Enagement_Details_Engagement_Details_ID" />
+      <PropertyRef Name="Client_Catalog_Client_Catalog_ID" />
+    </Key>
+    <Property Name="Enagement_Details_Engagement_Details_ID" Type="int" Nullable="false" />
+    <Property Name="Client_Catalog_Client_Catalog_ID" Type="int" Nullable="false" />
   </EntityType>
   <Association Name="Corporation_Catalog_FK">
     <End Role="Facility_Catalog" Type="CoreModel.Store.Facility_Catalog" Multiplicity="*" />
@@ -60,6 +123,42 @@
       </Principal>
       <Dependent Role="Facility_Catalog">
         <PropertyRef Name="Corporation_Catalog_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Engagement_Catalog_to_Enagement_Details">
+    <End Role="Enagement_Details" Type="CoreModel.Store.Enagement_Details" Multiplicity="*" />
+    <End Role="Engagement_Catalog" Type="CoreModel.Store.Engagement_Catalog" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Engagement_Catalog">
+        <PropertyRef Name="Engagement_Catalog_ID" />
+      </Principal>
+      <Dependent Role="Enagement_Details">
+        <PropertyRef Name="Engagement_Catalog_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enagement_DetailsClient_Catalog_Enagement_Details">
+    <End Role="Enagement_Details" Type="CoreModel.Store.Enagement_Details" Multiplicity="1" />
+    <End Role="Enagement_DetailsClient_Catalog" Type="CoreModel.Store.Enagement_DetailsClient_Catalog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Enagement_Details">
+        <PropertyRef Name="Engagement_Details_ID" />
+      </Principal>
+      <Dependent Role="Enagement_DetailsClient_Catalog">
+        <PropertyRef Name="Enagement_Details_Engagement_Details_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Enagement_DetailsClient_Catalog_Client_Catalog">
+    <End Role="Enagement_DetailsClient_Catalog" Type="CoreModel.Store.Enagement_DetailsClient_Catalog" Multiplicity="*" />
+    <End Role="Client_Catalog" Type="CoreModel.Store.Client_Catalog" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Client_Catalog">
+        <PropertyRef Name="Client_Catalog_ID" />
+      </Principal>
+      <Dependent Role="Enagement_DetailsClient_Catalog">
+        <PropertyRef Name="Client_Catalog_Client_Catalog_ID" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -97,12 +196,23 @@
           <Property Name="Corporation_Catalog_ID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Facility_Catalog_FK" Relationship="CoreModel.Corporation_Catalog_FK" FromRole="Corporation_Catalog" ToRole="Facility_Catalog" />
         </EntityType>
-        <EntityContainer Name="Core" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="edmCore" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Corporation_Catalog" EntityType="Self.Corporation_Catalog" />
           <EntitySet Name="Facility_Catalog" EntityType="CoreModel.Facility_Catalog" />
           <AssociationSet Name="Corporation_Catalog_FK" Association="CoreModel.Corporation_Catalog_FK">
             <End Role="Facility_Catalog" EntitySet="Facility_Catalog" />
             <End Role="Corporation_Catalog" EntitySet="Corporation_Catalog" />
+          </AssociationSet>
+          <EntitySet Name="Engagement_Catalog" EntityType="CoreModel.Engagement_Catalog" />
+          <EntitySet Name="Enagement_Details" EntityType="CoreModel.Enagement_Details" />
+          <EntitySet Name="Client_Catalog" EntityType="CoreModel.Client_Catalog" />
+          <AssociationSet Name="Enagement_DetailsClient_Catalog" Association="CoreModel.Enagement_DetailsClient_Catalog">
+            <End Role="Enagement_Details" EntitySet="Enagement_Details" />
+            <End Role="Client_Catalog" EntitySet="Client_Catalog" />
+          </AssociationSet>
+          <AssociationSet Name="Engagement_Catalog_to_Enagement_Details" Association="CoreModel.Engagement_Catalog_to_Enagement_Details">
+            <End Role="Enagement_Details" EntitySet="Enagement_Details" />
+            <End Role="Engagement_Catalog" EntitySet="Engagement_Catalog" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Facility_Catalog">
@@ -112,8 +222,10 @@
           <Property Name="Facility_Catalog_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Corporation_Catalog_FK" Relationship="CoreModel.Corporation_Catalog_FK" FromRole="Facility_Catalog" ToRole="Corporation_Catalog" />
           <Property Name="Corporation_Catalog_ID" Type="Int32" Nullable="false" />
-          <Property Name="Facility_Code" Type="String" Nullable="false" />
-          <Property Name="Facility_Name" Type="String" Nullable="false" />
+          <Property Name="Facility_Code" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Facility_Name" Type="String" Nullable="false" MaxLength="255" Unicode="false" FixedLength="false" />
+          <Property Name="Facility_Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Facility_Short_Code" Type="String" Nullable="false" MaxLength="6" Unicode="true" FixedLength="false" />
         </EntityType>
         <Association Name="Corporation_Catalog_FK">
           <End Type="CoreModel.Facility_Catalog" Role="Facility_Catalog" Multiplicity="*" />
@@ -127,12 +239,69 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Engagement_Catalog">
+          <Key>
+            <PropertyRef Name="Engagement_Catalog_ID" />
+          </Key>
+          <Property Name="Engagement_Catalog_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Engagement_Code" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Engagement_Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <Property Name="Engagement_Description" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Engagement" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Enagement_Details" Relationship="CoreModel.Engagement_Catalog_to_Enagement_Details" FromRole="Engagement_Catalog" ToRole="Enagement_Details" />
+        </EntityType>
+        <EntityType Name="Enagement_Details">
+          <Key>
+            <PropertyRef Name="Engagement_Details_ID" />
+          </Key>
+          <Property Name="Engagement_Details_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Engagement_Detail_Is_Active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Client_Catalog" Relationship="CoreModel.Enagement_DetailsClient_Catalog" FromRole="Enagement_Details" ToRole="Client_Catalog" />
+          <Property Name="Engagement_Start_Date" Type="DateTime" Nullable="false" />
+          <Property Name="Engagement_End_Date" Type="DateTime" Nullable="false" />
+          <Property Name="Engagement_Baseline_Start_Date" Type="DateTime" Nullable="false" />
+          <Property Name="Engagement_Baseline_End_Date" Type="DateTime" Nullable="false" />
+          <Property Name="Engagement_Revenue" Type="String" Nullable="false" />
+          <Property Name="Engagement_Expense" Type="String" Nullable="false" />
+          <Property Name="Engagement_Profit" Type="String" Nullable="false" />
+          <Property Name="Engagement_Revenue_Budget" Type="String" Nullable="false" />
+          <Property Name="Engagement_Expense_Budget" Type="String" Nullable="false" />
+          <Property Name="Engagement_Profit_Budget" Type="String" Nullable="false" />
+          <NavigationProperty Name="Engagement_Catalog" Relationship="CoreModel.Engagement_Catalog_to_Enagement_Details" FromRole="Enagement_Details" ToRole="Engagement_Catalog" />
+          <Property Name="Engagement_Catalog_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Client_Catalog">
+          <Key>
+            <PropertyRef Name="Client_Catalog_ID" />
+          </Key>
+          <Property Name="Client_Catalog_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Client_Code" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Client_Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Client_Description" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Enagement_Details" Relationship="CoreModel.Enagement_DetailsClient_Catalog" FromRole="Client_Catalog" ToRole="Enagement_Details" />
+        </EntityType>
+        <Association Name="Enagement_DetailsClient_Catalog">
+          <End Type="CoreModel.Enagement_Details" Role="Enagement_Details" Multiplicity="*" />
+          <End Type="CoreModel.Client_Catalog" Role="Client_Catalog" Multiplicity="*" />
+        </Association>
+        <Association Name="Engagement_Catalog_to_Enagement_Details">
+          <End Type="CoreModel.Enagement_Details" Role="Enagement_Details" Multiplicity="*" />
+          <End Type="CoreModel.Engagement_Catalog" Role="Engagement_Catalog" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Engagement_Catalog">
+              <PropertyRef Name="Engagement_Catalog_ID" />
+            </Principal>
+            <Dependent Role="Enagement_Details">
+              <PropertyRef Name="Engagement_Catalog_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="CoreModelStoreContainer" CdmEntityContainer="Core">
+  <EntityContainerMapping StorageEntityContainer="CoreModelStoreContainer" CdmEntityContainer="edmCore">
     <EntitySetMapping Name="Corporation_Catalog">
       <EntityTypeMapping TypeName="IsTypeOf(CoreModel.Corporation_Catalog)">
         <MappingFragment StoreEntitySet="Corporation_Catalog">
@@ -170,9 +339,59 @@
           <ScalarProperty Name="Corporation_Catalog_ID" ColumnName="Corporation_Catalog_ID" />
           <ScalarProperty Name="Facility_Code" ColumnName="Facility_Code" />
           <ScalarProperty Name="Facility_Name" ColumnName="Facility_Name" />
+          <ScalarProperty Name="Facility_Description" ColumnName="Facility_Description" />
+          <ScalarProperty Name="Facility_Short_Code" ColumnName="Facility_Short_Code" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Engagement_Catalog">
+      <EntityTypeMapping TypeName="IsTypeOf(CoreModel.Engagement_Catalog)">
+        <MappingFragment StoreEntitySet="Engagement_Catalog">
+          <ScalarProperty Name="Engagement_Catalog_ID" ColumnName="Engagement_Catalog_ID" />
+          <ScalarProperty Name="Engagement_Code" ColumnName="Engagement_Code" />
+          <ScalarProperty Name="Engagement_Name" ColumnName="Engagement_Name" />
+          <ScalarProperty Name="Engagement_Description" ColumnName="Engagement_Description" />
+          <ScalarProperty Name="Engagement" ColumnName="Engagement" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Enagement_Details">
+      <EntityTypeMapping TypeName="IsTypeOf(CoreModel.Enagement_Details)">
+        <MappingFragment StoreEntitySet="Enagement_Details">
+          <ScalarProperty Name="Engagement_Details_ID" ColumnName="Engagement_Details_ID" />
+          <ScalarProperty Name="Engagement_Detail_Is_Active" ColumnName="Engagement_Detail_Is_Active" />
+          <ScalarProperty Name="Engagement_Start_Date" ColumnName="Engagement_Start_Date" />
+          <ScalarProperty Name="Engagement_End_Date" ColumnName="Engagement_End_Date" />
+          <ScalarProperty Name="Engagement_Baseline_Start_Date" ColumnName="Engagement_Baseline_Start_Date" />
+          <ScalarProperty Name="Engagement_Baseline_End_Date" ColumnName="Engagement_Baseline_End_Date" />
+          <ScalarProperty Name="Engagement_Revenue" ColumnName="Engagement_Revenue" />
+          <ScalarProperty Name="Engagement_Expense" ColumnName="Engagement_Expense" />
+          <ScalarProperty Name="Engagement_Profit" ColumnName="Engagement_Profit" />
+          <ScalarProperty Name="Engagement_Revenue_Budget" ColumnName="Engagement_Revenue_Budget" />
+          <ScalarProperty Name="Engagement_Expense_Budget" ColumnName="Engagement_Expense_Budget" />
+          <ScalarProperty Name="Engagement_Profit_Budget" ColumnName="Engagement_Profit_Budget" />
+          <ScalarProperty Name="Engagement_Catalog_ID" ColumnName="Engagement_Catalog_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Client_Catalog">
+      <EntityTypeMapping TypeName="IsTypeOf(CoreModel.Client_Catalog)">
+        <MappingFragment StoreEntitySet="Client_Catalog">
+          <ScalarProperty Name="Client_Catalog_ID" ColumnName="Client_Catalog_ID" />
+          <ScalarProperty Name="Client_Code" ColumnName="Client_Code" />
+          <ScalarProperty Name="Client_Name" ColumnName="Client_Name" />
+          <ScalarProperty Name="Client_Description" ColumnName="Client_Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="Enagement_DetailsClient_Catalog" TypeName="CoreModel.Enagement_DetailsClient_Catalog" StoreEntitySet="Enagement_DetailsClient_Catalog">
+      <EndProperty Name="Enagement_Details">
+        <ScalarProperty Name="Engagement_Details_ID" ColumnName="Enagement_Details_Engagement_Details_ID" />
+      </EndProperty>
+      <EndProperty Name="Client_Catalog">
+        <ScalarProperty Name="Client_Catalog_ID" ColumnName="Client_Catalog_Client_Catalog_ID" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>
